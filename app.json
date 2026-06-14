@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "I Ching Insights AI",
+    "slug": "i-ching-v2-3",
+    "scheme": "ichinginsightsai",
+    "icon": "./assets/icon.png",
+    "android": {
+      "package": "com.cahalliwell.snack94b01a5f1d5b4a8d81b962d4f87049b3",
+      "versionCode": 11,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F7F3E8"
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3d60b966-975d-449e-b820-e69bda0de8e9"
+      }
+    },
+    "owner": "cahalliwell",
+    "plugins": [
+      "expo-font",
+      "expo-mail-composer",
+      "expo-secure-store"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.cahalliwell.snack94b01a5f1d5b4a8d81b962d4f87049b3",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    }
+  }
+}
