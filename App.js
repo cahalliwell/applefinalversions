@@ -1449,6 +1449,7 @@ function HexagramCard({
   onPress,
   showDetails = true,
   imageAspectRatio = 1,
+  imageResizeMode,
   compact = false,
 }) {
   if (!item) return null;
@@ -1473,7 +1474,7 @@ function HexagramCard({
           <Image
             source={{ uri: item.imageUrl }}
             style={stylesHexagramCard.image}
-           resizeMode={compact ? "contain" : "cover"}
+            resizeMode={imageResizeMode || (compact ? "contain" : "cover")}
           />
         ) : (
           <View style={stylesHexagramCard.placeholder}>
@@ -2062,7 +2063,14 @@ function HomeScreen({ navigation, route }) {
             </View>
             <View style={stylesHome.mainContent}>
               <View style={stylesHome.heroBlock}>
-                <Text style={stylesHome.appTitle}>I Ching Insights AI</Text>
+                <Text
+                  style={stylesHome.appTitle}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                  minimumFontScale={0.78}
+                >
+                  I Ching Insights AI
+                </Text>
                 <GlowingHexagon />
                 <Text style={stylesHome.subtitle}>
                   The oracle awaits with quiet truths and timeless wisdom
@@ -2201,6 +2209,8 @@ const stylesHome = StyleSheet.create({
     fontSize: 34,
     color: palette.ink,
     marginTop: 0,
+    textAlign: "center",
+    width: "100%",
   },
   subtitle: {
     fontFamily: fonts.body,
@@ -3200,6 +3210,7 @@ function LibraryScreen({ navigation }) {
                       item={item}
                       onPress={() => openHexagram(item)}
                       imageAspectRatio={compactLibraryLayout ? 1.18 : 1}
+                      imageResizeMode="contain"
                       compact={compactLibraryLayout}
                     />
                   </View>
