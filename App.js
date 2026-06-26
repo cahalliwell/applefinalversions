@@ -1030,14 +1030,20 @@ function SimpleGuidanceModal({ visible, onClose, onLearnMore, text }) {
           onPress={(event) => event.stopPropagation()}
           style={guidanceStyles.card}
         >
-          <Text style={guidanceStyles.title}>Guidance</Text>
-          <Text style={guidanceStyles.message}>{text}</Text>
-          <GoldButton full onPress={onClose}>
-            Close
-          </GoldButton>
-          <Pressable style={guidanceStyles.linkButton} onPress={onLearnMore} hitSlop={8}>
-            <Text style={guidanceStyles.linkText}>Learn more in Guidance, History & Glossary</Text>
-          </Pressable>
+          <ScrollView
+            style={guidanceStyles.cardScroll}
+            contentContainerStyle={guidanceStyles.cardScrollContent}
+            showsVerticalScrollIndicator
+          >
+            <Text style={guidanceStyles.title}>Guidance</Text>
+            <Text style={guidanceStyles.message}>{text}</Text>
+            <GoldButton full onPress={onClose}>
+              Close
+            </GoldButton>
+            <Pressable style={guidanceStyles.linkButton} onPress={onLearnMore} hitSlop={8}>
+              <Text style={guidanceStyles.linkText}>Learn more in Guidance, History & Glossary</Text>
+            </Pressable>
+          </ScrollView>
         </Pressable>
       </Pressable>
     </Modal>
@@ -1049,39 +1055,45 @@ function InitialDisclaimerModal({ visible, agreed, onToggleAgreement, onContinue
     <Modal visible={visible} transparent animationType="fade" onRequestClose={() => {}}>
       <Pressable style={guidanceStyles.backdrop}>
         <Pressable style={guidanceStyles.card} onPress={(event) => event.stopPropagation()}>
-          <Text style={guidanceStyles.messageLeft}>
-            This app provides symbolic interpretations of the I Ching for entertainment and personal reflection only.
-          </Text>
-          <Text style={guidanceStyles.messageLeft}>
-            Readings and AI-generated summaries are not predictions and should not be relied upon when making important life decisions.
-          </Text>
-          <Text style={guidanceStyles.messageLeft}>
-            The app does not provide medical, legal, financial, or psychological advice.
-          </Text>
-          <Text style={guidanceStyles.messageLeft}>
-            By continuing you agree to our{" "}
-            <Text style={guidanceStyles.inlineLink} onPress={() => onOpenLink(TERMS_AND_CONDITIONS_URL)}>
-              Terms & Conditions
-            </Text>{" "}
-            and{" "}
-            <Text style={guidanceStyles.inlineLink} onPress={() => onOpenLink(PRIVACY_POLICY_URL)}>
-              Privacy Policy
+          <ScrollView
+            style={guidanceStyles.cardScroll}
+            contentContainerStyle={guidanceStyles.cardScrollContent}
+            showsVerticalScrollIndicator
+          >
+            <Text style={guidanceStyles.messageLeft}>
+              This app provides symbolic interpretations of the I Ching for entertainment and personal reflection only.
             </Text>
-            .
-          </Text>
-
-          <Pressable style={guidanceStyles.agreementRow} onPress={onToggleAgreement}>
-            <View style={[guidanceStyles.checkbox, agreed && guidanceStyles.checkboxChecked]}>
-              {agreed ? <Ionicons name="checkmark" size={14} color={palette.white} /> : null}
-            </View>
-            <Text style={guidanceStyles.agreementText}>
-              I agree to the Terms & Conditions and Privacy Policy
+            <Text style={guidanceStyles.messageLeft}>
+              Readings and AI-generated summaries are not predictions and should not be relied upon when making important life decisions.
             </Text>
-          </Pressable>
+            <Text style={guidanceStyles.messageLeft}>
+              The app does not provide medical, legal, financial, or psychological advice.
+            </Text>
+            <Text style={guidanceStyles.messageLeft}>
+              By continuing you agree to our{" "}
+              <Text style={guidanceStyles.inlineLink} onPress={() => onOpenLink(TERMS_AND_CONDITIONS_URL)}>
+                Terms & Conditions
+              </Text>{" "}
+              and{" "}
+              <Text style={guidanceStyles.inlineLink} onPress={() => onOpenLink(PRIVACY_POLICY_URL)}>
+                Privacy Policy
+              </Text>
+              .
+            </Text>
 
-          <GoldButton full onPress={onContinue} disabled={!agreed}>
-            Continue
-          </GoldButton>
+            <Pressable style={guidanceStyles.agreementRow} onPress={onToggleAgreement}>
+              <View style={[guidanceStyles.checkbox, agreed && guidanceStyles.checkboxChecked]}>
+                {agreed ? <Ionicons name="checkmark" size={14} color={palette.white} /> : null}
+              </View>
+              <Text style={guidanceStyles.agreementText}>
+                I agree to the Terms & Conditions and Privacy Policy
+              </Text>
+            </Pressable>
+
+            <GoldButton full onPress={onContinue} disabled={!agreed}>
+              Continue
+            </GoldButton>
+          </ScrollView>
         </Pressable>
       </Pressable>
     </Modal>
@@ -1106,14 +1118,15 @@ const guidanceStyles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.25)",
     alignItems: "center",
     justifyContent: "center",
-    padding: theme.space(2.5),
+    paddingHorizontal: theme.space(2.5),
+    paddingVertical: theme.space(2),
   },
   card: {
     width: "100%",
     maxWidth: 360,
+    maxHeight: "92%",
     backgroundColor: palette.goldLight,
     borderRadius: theme.radius,
-    padding: theme.space(2),
     borderWidth: 1,
     borderColor: palette.goldDeep,
     shadowColor: palette.goldDeep,
@@ -1121,6 +1134,13 @@ const guidanceStyles = StyleSheet.create({
     shadowRadius: 14,
     shadowOffset: { width: 0, height: 8 },
     elevation: 10,
+  },
+  cardScroll: {
+    flexGrow: 0,
+  },
+  cardScrollContent: {
+    padding: theme.space(2),
+    paddingBottom: theme.space(2.5),
   },
   title: {
     fontFamily: fonts.title,
@@ -2063,14 +2083,7 @@ function HomeScreen({ navigation, route }) {
             </View>
             <View style={stylesHome.mainContent}>
               <View style={stylesHome.heroBlock}>
-                <Text
-                  style={stylesHome.appTitle}
-                  numberOfLines={1}
-                  adjustsFontSizeToFit
-                  minimumFontScale={0.78}
-                >
-                  I Ching Insights AI
-                </Text>
+                <Text style={stylesHome.appTitle}>I Ching Insights AI</Text>
                 <GlowingHexagon />
                 <Text style={stylesHome.subtitle}>
                   The oracle awaits with quiet truths and timeless wisdom
@@ -2209,8 +2222,6 @@ const stylesHome = StyleSheet.create({
     fontSize: 34,
     color: palette.ink,
     marginTop: 0,
-    textAlign: "center",
-    width: "100%",
   },
   subtitle: {
     fontFamily: fonts.body,
@@ -3223,6 +3234,11 @@ function LibraryScreen({ navigation }) {
                   </Text>
                 }
               />
+              {filtered.length > 1 ? (
+                <View pointerEvents="none" style={stylesLibrary.scrollCue}>
+                  <Ionicons name="chevron-forward" size={22} color={palette.goldDeep} />
+                </View>
+              ) : null}
             </View>
           </View>
         </ScrollView>
@@ -3290,6 +3306,7 @@ const stylesLibrary = StyleSheet.create({
   carouselWrapper: {
     flex: 1,
     justifyContent: "flex-start",
+    position: "relative",
   },
   flatList: {
     flexGrow: 1,
@@ -3300,6 +3317,24 @@ const stylesLibrary = StyleSheet.create({
   },
   cardSlot: {
     marginRight: theme.space(1.75),
+  },
+  scrollCue: {
+    position: "absolute",
+    right: theme.space(0.5),
+    top: "42%",
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.72)",
+    borderWidth: 1,
+    borderColor: "rgba(176, 139, 49, 0.35)",
+    shadowColor: palette.goldDeep,
+    shadowOpacity: 0.14,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 3,
   },
   loadingText: {
     fontFamily: fonts.body,
