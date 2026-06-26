@@ -1027,6 +1027,7 @@ function useModalFrame() {
     240,
     height - topPadding - bottomPadding - verticalPadding
   );
+  const maxScrollHeight = Math.max(120, maxCardHeight - theme.space(18));
 
   return {
     backdropStyle: {
@@ -1034,7 +1035,10 @@ function useModalFrame() {
       paddingBottom: bottomPadding,
     },
     cardStyle: {
-      height: maxCardHeight,
+      maxHeight: maxCardHeight,
+    },
+    scrollStyle: {
+      maxHeight: maxScrollHeight,
     },
   };
 }
@@ -1052,7 +1056,7 @@ function SimpleGuidanceModal({ visible, onClose, onLearnMore, text }) {
       <View style={[guidanceStyles.backdrop, modalFrame.backdropStyle]}>
         <View style={[guidanceStyles.card, modalFrame.cardStyle]}>
           <ScrollView
-            style={guidanceStyles.cardScroll}
+            style={[guidanceStyles.cardScroll, modalFrame.scrollStyle]}
             contentContainerStyle={guidanceStyles.cardScrollContent}
             showsVerticalScrollIndicator
             bounces={false}
@@ -1084,7 +1088,7 @@ function InitialDisclaimerModal({ visible, agreed, onToggleAgreement, onContinue
       <View style={[guidanceStyles.backdrop, modalFrame.backdropStyle]}>
         <View style={[guidanceStyles.card, modalFrame.cardStyle]}>
           <ScrollView
-            style={guidanceStyles.cardScroll}
+            style={[guidanceStyles.cardScroll, modalFrame.scrollStyle]}
             contentContainerStyle={guidanceStyles.cardScrollContent}
             showsVerticalScrollIndicator
             bounces={false}
@@ -1167,7 +1171,7 @@ const guidanceStyles = StyleSheet.create({
     overflow: "hidden",
   },
   cardScroll: {
-    flex: 1,
+    flexGrow: 0,
     flexShrink: 1,
     width: "100%",
   },
