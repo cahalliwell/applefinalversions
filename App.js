@@ -1017,7 +1017,31 @@ const deleteAccountButtonStyles = StyleSheet.create({
 });
 
 // ℹ️ Guidance UI
+function useModalFrame() {
+  const { height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  const verticalPadding = theme.space(2);
+  const topPadding = Math.max(insets.top, verticalPadding);
+  const bottomPadding = Math.max(insets.bottom, verticalPadding);
+  const maxCardHeight = Math.max(
+    240,
+    height - topPadding - bottomPadding - verticalPadding
+  );
+
+  return {
+    backdropStyle: {
+      paddingTop: topPadding,
+      paddingBottom: bottomPadding,
+    },
+    cardStyle: {
+      maxHeight: maxCardHeight,
+    },
+  };
+}
+
 function SimpleGuidanceModal({ visible, onClose, onLearnMore, text }) {
+  const modalFrame = useModalFrame();
+
   return (
     <Modal
       visible={visible}
@@ -1025,25 +1049,32 @@ function SimpleGuidanceModal({ visible, onClose, onLearnMore, text }) {
       animationType="fade"
       onRequestClose={onClose}
     >
-      <Pressable style={guidanceStyles.backdrop} onPress={onClose}>
+      <Pressable
+        style={[guidanceStyles.backdrop, modalFrame.backdropStyle]}
+        onPress={onClose}
+      >
         <Pressable
           onPress={(event) => event.stopPropagation()}
-          style={guidanceStyles.card}
+          style={[guidanceStyles.card, modalFrame.cardStyle]}
         >
           <ScrollView
             style={guidanceStyles.cardScroll}
             contentContainerStyle={guidanceStyles.cardScrollContent}
             showsVerticalScrollIndicator
+            bounces={false}
+            keyboardShouldPersistTaps="handled"
           >
             <Text style={guidanceStyles.title}>Guidance</Text>
             <Text style={guidanceStyles.message}>{text}</Text>
-            <GoldButton full onPress={onClose}>
-              Close
-            </GoldButton>
             <Pressable style={guidanceStyles.linkButton} onPress={onLearnMore} hitSlop={8}>
               <Text style={guidanceStyles.linkText}>Learn more in Guidance, History & Glossary</Text>
             </Pressable>
           </ScrollView>
+          <View style={guidanceStyles.cardFooter}>
+            <GoldButton full onPress={onClose}>
+              Close
+            </GoldButton>
+          </View>
         </Pressable>
       </Pressable>
     </Modal>
@@ -1051,14 +1082,21 @@ function SimpleGuidanceModal({ visible, onClose, onLearnMore, text }) {
 }
 
 function InitialDisclaimerModal({ visible, agreed, onToggleAgreement, onContinue, onOpenLink }) {
+  const modalFrame = useModalFrame();
+
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={() => {}}>
-      <Pressable style={guidanceStyles.backdrop}>
-        <Pressable style={guidanceStyles.card} onPress={(event) => event.stopPropagation()}>
+      <Pressable style={[guidanceStyles.backdrop, modalFrame.backdropStyle]}>
+        <Pressable
+          style={[guidanceStyles.card, modalFrame.cardStyle]}
+          onPress={(event) => event.stopPropagation()}
+        >
           <ScrollView
             style={guidanceStyles.cardScroll}
             contentContainerStyle={guidanceStyles.cardScrollContent}
             showsVerticalScrollIndicator
+            bounces={false}
+            keyboardShouldPersistTaps="handled"
           >
             <Text style={guidanceStyles.messageLeft}>
               This app provides symbolic interpretations of the I Ching for entertainment and personal reflection only.
@@ -1089,11 +1127,12 @@ function InitialDisclaimerModal({ visible, agreed, onToggleAgreement, onContinue
                 I agree to the Terms & Conditions and Privacy Policy
               </Text>
             </Pressable>
-
+          </ScrollView>
+          <View style={guidanceStyles.cardFooter}>
             <GoldButton full onPress={onContinue} disabled={!agreed}>
               Continue
             </GoldButton>
-          </ScrollView>
+          </View>
         </Pressable>
       </Pressable>
     </Modal>
@@ -1124,7 +1163,6 @@ const guidanceStyles = StyleSheet.create({
   card: {
     width: "100%",
     maxWidth: 360,
-    maxHeight: "92%",
     backgroundColor: palette.goldLight,
     borderRadius: theme.radius,
     borderWidth: 1,
@@ -1134,13 +1172,21 @@ const guidanceStyles = StyleSheet.create({
     shadowRadius: 14,
     shadowOffset: { width: 0, height: 8 },
     elevation: 10,
+    overflow: "hidden",
   },
   cardScroll: {
-    flexGrow: 0,
+    flexShrink: 1,
+    width: "100%",
   },
   cardScrollContent: {
     padding: theme.space(2),
-    paddingBottom: theme.space(2.5),
+    paddingBottom: theme.space(1.5),
+  },
+  cardFooter: {
+    paddingHorizontal: theme.space(2),
+    paddingBottom: theme.space(2),
+    paddingTop: theme.space(0.5),
+    backgroundColor: palette.goldLight,
   },
   title: {
     fontFamily: fonts.title,
