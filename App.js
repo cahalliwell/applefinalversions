@@ -1034,7 +1034,7 @@ function useModalFrame() {
       paddingBottom: bottomPadding,
     },
     cardStyle: {
-      maxHeight: maxCardHeight,
+      height: maxCardHeight,
     },
   };
 }
