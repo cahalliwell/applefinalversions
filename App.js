@@ -1049,20 +1049,15 @@ function SimpleGuidanceModal({ visible, onClose, onLearnMore, text }) {
       animationType="fade"
       onRequestClose={onClose}
     >
-      <Pressable
-        style={[guidanceStyles.backdrop, modalFrame.backdropStyle]}
-        onPress={onClose}
-      >
-        <Pressable
-          onPress={(event) => event.stopPropagation()}
-          style={[guidanceStyles.card, modalFrame.cardStyle]}
-        >
+      <View style={[guidanceStyles.backdrop, modalFrame.backdropStyle]}>
+        <View style={[guidanceStyles.card, modalFrame.cardStyle]}>
           <ScrollView
             style={guidanceStyles.cardScroll}
             contentContainerStyle={guidanceStyles.cardScrollContent}
             showsVerticalScrollIndicator
             bounces={false}
             keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled
           >
             <Text style={guidanceStyles.title}>Guidance</Text>
             <Text style={guidanceStyles.message}>{text}</Text>
@@ -1075,8 +1070,8 @@ function SimpleGuidanceModal({ visible, onClose, onLearnMore, text }) {
               Close
             </GoldButton>
           </View>
-        </Pressable>
-      </Pressable>
+        </View>
+      </View>
     </Modal>
   );
 }
@@ -1086,17 +1081,15 @@ function InitialDisclaimerModal({ visible, agreed, onToggleAgreement, onContinue
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={() => {}}>
-      <Pressable style={[guidanceStyles.backdrop, modalFrame.backdropStyle]}>
-        <Pressable
-          style={[guidanceStyles.card, modalFrame.cardStyle]}
-          onPress={(event) => event.stopPropagation()}
-        >
+      <View style={[guidanceStyles.backdrop, modalFrame.backdropStyle]}>
+        <View style={[guidanceStyles.card, modalFrame.cardStyle]}>
           <ScrollView
             style={guidanceStyles.cardScroll}
             contentContainerStyle={guidanceStyles.cardScrollContent}
             showsVerticalScrollIndicator
             bounces={false}
             keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled
           >
             <Text style={guidanceStyles.messageLeft}>
               This app provides symbolic interpretations of the I Ching for entertainment and personal reflection only.
@@ -1118,7 +1111,8 @@ function InitialDisclaimerModal({ visible, agreed, onToggleAgreement, onContinue
               </Text>
               .
             </Text>
-
+          </ScrollView>
+          <View style={guidanceStyles.cardFooter}>
             <Pressable style={guidanceStyles.agreementRow} onPress={onToggleAgreement}>
               <View style={[guidanceStyles.checkbox, agreed && guidanceStyles.checkboxChecked]}>
                 {agreed ? <Ionicons name="checkmark" size={14} color={palette.white} /> : null}
@@ -1127,14 +1121,12 @@ function InitialDisclaimerModal({ visible, agreed, onToggleAgreement, onContinue
                 I agree to the Terms & Conditions and Privacy Policy
               </Text>
             </Pressable>
-          </ScrollView>
-          <View style={guidanceStyles.cardFooter}>
             <GoldButton full onPress={onContinue} disabled={!agreed}>
               Continue
             </GoldButton>
           </View>
-        </Pressable>
-      </Pressable>
+        </View>
+      </View>
     </Modal>
   );
 }
@@ -1175,6 +1167,7 @@ const guidanceStyles = StyleSheet.create({
     overflow: "hidden",
   },
   cardScroll: {
+    flex: 1,
     flexShrink: 1,
     width: "100%",
   },
@@ -1187,6 +1180,8 @@ const guidanceStyles = StyleSheet.create({
     paddingBottom: theme.space(2),
     paddingTop: theme.space(0.5),
     backgroundColor: palette.goldLight,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(176, 139, 49, 0.22)",
   },
   title: {
     fontFamily: fonts.title,
@@ -1228,8 +1223,8 @@ const guidanceStyles = StyleSheet.create({
   },
   agreementRow: {
     flexDirection: "row",
-    alignItems: "center",
-    marginBottom: theme.space(1.5),
+    alignItems: "flex-start",
+    marginBottom: theme.space(1),
   },
   checkbox: {
     width: 22,
